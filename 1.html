@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FabTrend Boutique | Complete Management System | Zion Mall Eldoret</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: #fef7ef;
+            color: #2c241a;
+        }
+
+        /* Header */
+        .store-header {
+            background: linear-gradient(135deg, #1e1915 0%, #2c241e 100%);
+            color: #f5e6d9;
+            padding: 0.8rem 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #f0e0d0;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c17b4c, #9b5e38);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            color: #8b735c;
+            margin-top: 2px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            padding: 0.6rem 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: #2c241a;
+        }
+        .nav-btn i { font-size: 1.1rem; }
+        .nav-btn:hover { background: #f2e5d8; color: #c17b4c; }
+        .cart-badge {
+            background: #c17b4c;
+            color: white;
+            border-radius: 30px;
+            padding: 0.15rem 0.65rem;
+            font-size: 0.75rem;
+            margin-left: 6px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section visibility */
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .active-section { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
+        /* Hero Banner */
+        .boutique-hero {
+            background: linear-gradient(120deg, #f7ede2, #fff4ea);
+            border-radius: 32px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #ffe1c6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .boutique-hero h2 { font-size: 1.9rem; color: #3b2c21; }
+        .boutique-hero p { margin-top: 8px; color: #6b4f34; }
+
+        /* Filters */
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-bar select, .filter-bar input {
+            padding: 0.6rem 1rem;
+            border-radius: 60px;
+            border: 1px solid #e2cfbc;
+            background: white;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: all 0.25s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f0e2d4;
+        }
+        .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 30px rgba(0,0,0,0.08); }
+        .product-img {
+            background: #faf1e8;
+            height: 230px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.8rem;
+        }
+        .product-info { padding: 1rem 1.2rem 1.3rem; }
+        .product-info h3 { font-size: 1.2rem; font-weight: 700; }
+        .category { font-size: 0.7rem; color: #b78f6b; text-transform: uppercase; margin: 5px 0; }
+        .price { font-size: 1.5rem; font-weight: 800; color: #2c241a; margin: 6px 0; }
+        .stock { font-size: 0.75rem; margin-bottom: 10px; font-weight: 500; }
+        .in-stock { color: #2b6e3c; }
+        .low-stock { color: #e67e22; }
+        .out-stock { color: #c0392b; }
+        .add-btn {
+            background: #2c241a;
+            color: white;
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 60px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .add-btn:disabled { background: #ccc2b7; cursor: not-allowed; }
+        .add-btn:hover:not(:disabled) { background: #c17b4c; }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .data-table th { background: #f2e8df; padding: 14px; text-align: left; }
+        .data-table td { padding: 12px; border-bottom: 1px solid #f0e2d4; }
+
+        .admin-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 28px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        .admin-form input, .admin-form select {
+            padding: 10px 14px;
+            border-radius: 40px;
+            border: 1px solid #e2cfbc;
+            flex: 1;
+            min-width: 130px;
+        }
+        .btn-primary { background: #c17b4c; color: white; border: none; padding: 0.7rem 1.6rem; border-radius: 40px; font-weight: bold; cursor: pointer; }
+        .btn-secondary { background: #2c241a; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 40px; cursor: pointer; }
+        .status-pending { background: #fff0e0; color: #b85c1a; padding: 4px 12px; border-radius: 40px; font-size: 0.75rem; font-weight: bold; }
+        .status-completed { background: #e0f2e3; color: #2b6e3c; padding: 4px 12px; border-radius: 40px; }
+        .cart-summary { background: #fff9f2; padding: 1.5rem; border-radius: 28px; margin-top: 1.5rem; text-align: right; }
+        footer { text-align: center; padding: 2rem; color: #8b735c; border-top: 1px solid #f0e2d4; margin-top: 2rem; }
+        @media (max-width: 700px) { .navbar { flex-direction: column; } .container { padding: 1rem; } }
+        .whatsapp-btn { background: #25D366; color: white; border: none; padding: 6px 12px; border-radius: 40px; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+
+<div class="store-header">
+    <i class="fas fa-map-marker-alt"></i> ZION MALL, OLOO STREET, ELDORET | Mon-Sat: 9am - 8pm | Cash on Delivery & WhatsApp Orders
+</div>
+
+<div class="navbar">
+    <div class="logo">
+        <h1>FABTREND <span style="color:#c17b4c;">BOUTIQUE</span></h1>
+        <p><i class="fas fa-crown"></i> Eldoret's Premium Fashion Destination</p>
+    </div>
+    <div class="nav-buttons">
+        <button class="nav-btn" id="shopNavBtn"><i class="fas fa-store"></i> Shop</button>
+        <button class="nav-btn" id="cartNavBtn"><i class="fas fa-shopping-bag"></i> Cart <span id="cartCountBadge" class="cart-badge">0</span></button>
+        <button class="nav-btn" id="adminNavBtn"><i class="fas fa-user-shield"></i> Admin Panel</button>
+    </div>
+</div>
+
+<div class="container">
+    <!-- SHOP SECTION -->
+    <div id="shopSection" class="section active-section">
+        <div class="boutique-hero">
+            <h2><i class="fas fa-gem"></i> New Arrivals at FabTrend</h2>
+            <p><i class="fas fa-location-dot"></i> Located at Zion Mall, Oloo Street, Eldoret — Walk in or order online for delivery within Eldoret town.</p>
+            <p><i class="fab fa-whatsapp"></i> WhatsApp Order: <strong>+254 712 345 678</strong> | Cash on Delivery Available | Free delivery within CBD</p>
+        </div>
+        
+        <!-- Search & Filter -->
+        <div class="filter-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Search products..." style="flex:2;">
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="Women’s wear">Women’s wear</option>
+                <option value="Men’s wear">Men’s wear</option>
+                <option value="Shoes">Shoes</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+            <select id="sortFilter">
+                <option value="default">Sort by: Default</option>
+                <option value="priceAsc">Price: Low to High</option>
+                <option value="priceDesc">Price: High to Low</option>
+            </select>
+        </div>
+        <div id="productsGrid" class="product-grid"></div>
+    </div>
+
+    <!-- CART SECTION -->
+    <div id="cartSection" class="section">
+        <h2><i class="fas fa-shopping-cart"></i> Your Shopping Bag</h2>
+        <div id="cartContent">
+            <table class="data-table" id="cartTable">
+                <thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th></th></tr></thead>
+                <tbody id="cartItemsBody"></tbody>
+            </table>
+            <div class="cart-summary">
+                <h3>Total: KES <span id="cartTotal">0</span></h3>
+                <button id="checkoutBtn" class="btn-primary" style="margin-top: 1rem;"><i class="fas fa-credit-card"></i> Place Order (Cash on Delivery)</button>
+                <button id="whatsappOrderBtn" class="whatsapp-btn" style="margin-left: 1rem;"><i class="fab fa-whatsapp"></i> WhatsApp Order</button>
+                <div id="orderMessage" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN SECTION: Full Product + Order Management -->
+    <div id="adminSection" class="section">
+        <h2><i class="fas fa-tools"></i> Admin Dashboard — Full Control</h2>
+        <div style="background:#f2e6dc; padding:1rem; border-radius: 28px; margin:1rem 0;">
+            <i class="fas fa-database"></i> Manage inventory, add/edit/delete products, track orders & update status.
+        </div>
+        
+        <!-- Add Product Form -->
+        <div class="admin-form">
+            <input type="text" id="prodName" placeholder="Product name">
+            <select id="prodCategory">
+                <option>Women’s wear</option><option>Men’s wear</option><option>Shoes</option><option>Accessories</option>
+            </select>
+            <input type="number" id="prodPrice" placeholder="Price (KES)">
+            <input type="number" id="prodStock" placeholder="Stock quantity">
+            <input type="text" id="prodImageIcon" placeholder="Icon emoji (👗, 👟)" value="👗">
+            <button id="addProductBtn" class="btn-secondary"><i class="fas fa-plus"></i> Add Product</button>
+        </div>
+
+        <h3>📦 Product Inventory (Manage)</h3>
+        <table class="data-table" id="adminProductsTable">
+            <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+            <tbody id="adminProductsBody"></tbody>
+        </table>
+
+        <h3 style="margin-top: 2rem;">📋 Customer Orders & Tracking</h3>
+        <table class="data-table" id="ordersTable">
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Location</th><th>Total (KES)</th><th>Status</th><th>Update Status</th></tr></thead>
+            <tbody id="ordersBody"></tbody>
+        </table>
+    </div>
+</div>
+<footer>
+    <i class="fas fa-heart" style="color:#c17b4c;"></i> FabTrend Boutique — Zion Mall, Oloo Street, Eldoret | Quality Fashion & Accessories
+</footer>
+
+<script>
+    // ------------------- FULL DATA -------------------
+    let products = [
+        { id: 1, name: "Floral Midi Dress", category: "Women’s wear", price: 3200, stock: 8, imageIcon: "👗" },
+        { id: 2, name: "Slim Fit Blazer", category: "Men’s wear", price: 4500, stock: 5, imageIcon: "🧥" },
+        { id: 3, name: "Leather Sneakers", category: "Shoes", price: 3800, stock: 12, imageIcon: "👟" },
+        { id: 4, name: "Gold Hoop Earrings", category: "Accessories", price: 850, stock: 20, imageIcon: "💎" },
+        { id: 5, name: "Denim Jeans (Women)", category: "Women’s wear", price: 2900, stock: 0, imageIcon: "👖" },
+        { id: 6, name: "Classic Oxford Shoes", category: "Shoes", price: 4200, stock: 4, imageIcon: "👞" },
+        { id: 7, name: "Leather Handbag", category: "Accessories", price: 5600, stock: 3, imageIcon: "👜" },
+        { id: 8, name: "Men's Casual Shirt", category: "Men’s wear", price: 2100, stock: 10, imageIcon: "👕" }
+    ];
+    let cart = []; // { productId, name, price, quantity }
+    let orders = [
+        { id: 1001, customer_name: "Aisha Wanjiku", phone: "0712345678", location: "Zion Mall Area, Eldoret", total_price: 6400, status: "pending", items: [] },
+        { id: 1002, customer_name: "Brian Kipchumba", phone: "0722334455", location: "Oloo Street, Eldoret", total_price: 3800, status: "completed", items: [] }
+    ];
+    let nextOrderId = 1003;
+
+    // Load / Save localStorage
+    function saveAllData() {
+        localStorage.setItem('fabtrend_products_v2', JSON.stringify(products));
+        localStorage.setItem('fabtrend_orders_v2', JSON.stringify(orders));
+        localStorage.setItem('fabtrend_cart_v2', JSON.stringify(cart));
+    }
+    function loadAllData() {
+        const savedProducts = localStorage.getItem('fabtrend_products_v2');
+        const savedOrders = localStorage.getItem('fabtrend_orders_v2');
+        const savedCart = localStorage.getItem('fabtrend_cart_v2');
+        if (savedProducts) products = JSON.parse(savedProducts);
+        if (savedOrders) orders = JSON.parse(savedOrders);
+        if (savedCart) cart = JSON.parse(savedCart);
+        const maxId = orders.reduce((max, o) => Math.max(max, o.id), 1002);
+        nextOrderId = maxId + 1;
+    }
+    loadAllData();
+
+    // Helper render all
+    function renderFullApp() {
+        renderFilteredProducts();
+        renderCartTable();
+        renderAdminProducts();
+        renderOrdersTable();
+        updateCartBadge();
+        saveAllData();
+    }
+
+    // Product filtering + sorting + search
+    function renderFilteredProducts() {
+        const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        const category = document.getElementById('categoryFilter')?.value || 'all';
+        const sortType = document.getElementById('sortFilter')?.value || 'default';
+        let filtered = products.filter(p => p.name.toLowerCase().includes(searchTerm));
+        if (category !== 'all') filtered = filtered.filter(p => p.category === category);
+        
+        if (sortType === 'priceAsc') filtered.sort((a,b) => a.price - b.price);
+        if (sortType === 'priceDesc') filtered.sort((a,b) => b.price - a.price);
+        
+        const grid = document.getElementById('productsGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        if(filtered.length === 0) { grid.innerHTML = '<div style="padding:2rem; text-align:center;">No products found ✨</div>'; return; }
+        filtered.forEach(prod => {
+            const inStock = prod.stock > 0;
+            let stockClass = "in-stock";
+            let stockText = `✓ In stock (${prod.stock})`;
+            if(prod.stock === 0) { stockClass = "out-stock"; stockText = "✗ Out of stock"; }
+            else if(prod.stock <= 2) { stockClass = "low-stock"; stockText = `⚠️ Low stock (${prod.stock} left)`; }
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-img">${prod.imageIcon || '👚'}</div>
+                <div class="product-info">
+                    <h3>${escapeHtml(prod.name)}</h3>
+                    <div class="category">${prod.category}</div>
+                    <div class="price">KES ${prod.price.toLocaleString()}</div>
+                    <div class="stock ${stockClass}">${stockText}</div>
+                    <button class="add-to-cart-btn" data-id="${prod.id}" ${!inStock ? 'disabled' : ''}>
+                        <i class="fas fa-bag-shopping"></i> Add to Cart
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                addToCart(id);
+            });
+        });
+    }
+
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        if (!product || product.stock <= 0) { alert("Out of stock!"); return; }
+        const existing = cart.find(i => i.productId === productId);
+        if (existing) {
+            if (existing.quantity + 1 > product.stock) { alert(`Only ${product.stock} left in stock.`); return; }
+            existing.quantity++;
+        } else {
+            cart.push({ productId: product.id, name: product.name, price: product.price, quantity: 1 });
+        }
+        saveAllData();
+        renderCartTable();
+        updateCartBadge();
+        alert(`${product.name} added to cart!`);
+    }
+
+    function renderCartTable() {
+        const tbody = document.getElementById('cartItemsBody');
+        const totalSpan = document.getElementById('cartTotal');
+        if (!tbody) return;
+        if (cart.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Your cart is empty. Add beautiful outfits! 🛍️</td></tr>';
+            if(totalSpan) totalSpan.innerText = '0';
+            return;
+        }
+        let total = 0;
+        tbody.innerHTML = '';
+        cart.forEach((item, idx) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = item.name;
+            row.insertCell(1).innerText = `KES ${item.price.toLocaleString()}`;
+            row.insertCell(2).innerHTML = `
+                <button class="qty-change" data-idx="${idx}" data-delta="-1" style="background:#f0e0d2; border:none; width:28px; border-radius:30px;">-</button>
+                <span style="margin:0 10px;">${item.quantity}</span>
+                <button class="qty-change" data-idx="${idx}" data-delta="1" style="background:#f0e0d2; border:none; width:28px; border-radius:30px;">+</button>
+            `;
+            row.insertCell(3).innerText = `KES ${itemTotal.toLocaleString()}`;
+            row.insertCell(4).innerHTML = `<button class="remove-cart-item" data-idx="${idx}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash-alt"></i></button>`;
+        });
+        if(totalSpan) totalSpan.innerText = total.toLocaleString();
+        document.querySelectorAll('.qty-change').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.getAttribute('data-idx'));
+                const delta = parseInt(btn.getAttribute('data-delta'));
+                updateCartQty(idx, delta);
+            });
+        });
+        document.querySelectorAll('.remove-cart-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.getAttribute('data-idx'));
+                cart.splice(idx, 1);
+                saveAllData();
+                renderCartTable();
+                updateCartBadge();
+            });
+        });
+    }
+
+    function updateCartQty(index, delta) {
+        if (!cart[index]) return;
+        const prod = products.find(p => p.id === cart[index].productId);
+        if (!prod) return;
+        const newQty = cart[index].quantity + delta;
+        if (newQty < 1) {
+            cart.splice(index, 1);
+        } else if (newQty > prod.stock) {
+            alert(`Cannot exceed available stock (${prod.stock})`);
+            return;
+        } else {
+            cart[index].quantity = newQty;
+        }
+        saveAllData();
+        renderCartTable();
+        updateCartBadge();
+    }
+
+    function updateCartBadge() {
+        const total = cart.reduce((sum, i) => sum + i.quantity, 0);
+        const badge = document.getElementById('cartCountBadge');
+        if(badge) badge.innerText = total;
+    }
+
+    // Checkout feature (Cash on Delivery)
+    document.getElementById('checkoutBtn')?.addEventListener('click', () => {
+        if(cart.length === 0) { alert("Cart is empty. Add products first!"); return; }
+        const customerName = prompt("Full name:", "Customer Name");
+        if(!customerName) return;
+        const phone = prompt("Phone number (for delivery):", "07XXXXXXXX");
+        if(!phone) return;
+        const location = prompt("Delivery location (Eldoret area):", "Zion Mall / Oloo Street");
+        if(!location) return;
+        let totalPrice = 0;
+        for(let item of cart) {
+            const prod = products.find(p => p.id === item.productId);
+            if(!prod || prod.stock < item.quantity) {
+                alert(`Insufficient stock for ${item.name}. Please update cart.`);
+                return;
+            }
+            totalPrice += item.price * item.quantity;
+            prod.stock -= item.quantity;
+        }
+        const newOrder = {
+            id: nextOrderId++,
+            customer_name: customerName,
+            phone: phone,
+            location: location,
+            total_price: totalPrice,
+            status: "pending",
+            items: [...cart]
+        };
+        orders.unshift(newOrder);
+        cart = [];
+        saveAllData();
+        renderFullApp();
+        alert(`✅ Order #${newOrder.id} placed successfully! Cash on delivery. We'll contact you soon.`);
+        document.getElementById('shopNavBtn').click();
+    });
+
+    // WhatsApp order integration
+    document.getElementById('whatsappOrderBtn')?.addEventListener('click', () => {
+        if(cart.length === 0) { alert("Cart is empty. Add items first."); return; }
+        let orderText = "🛍️ *FabTrend Boutique Order*%0A";
+        let total = 0;
+        cart.forEach(item => {
+            orderText += `• ${item.name} x${item.quantity} = KES ${(item.price * item.quantity).toLocaleString()}%0A`;
+            total += item.price * item.quantity;
+        });
+        orderText += `%0A*Total: KES ${total.toLocaleString()}*%0A📍 Delivery: Zion Mall, Eldoret%0A📞 Customer: `;
+        const name = prompt("Your name for WhatsApp order:") || "Customer";
+        const phoneNum = prompt("Your phone number:") || "07XXXXXX";
+        orderText += `${name} (${phoneNum})%0A💰 Cash on Delivery.`;
+        const whatsappUrl = `https://wa.me/254712345678?text=${orderText}`;
+        window.open(whatsappUrl, '_blank');
+    });
+
+    // Admin: Add Product
+    document.getElementById('addProductBtn')?.addEventListener('click', () => {
+        const name = document.getElementById('prodName').value.trim();
+        const category = document.getElementById('prodCategory').value;
+        const price = parseFloat(document.getElementById('prodPrice').value);
+        const stock = parseInt(document.getElementById('prodStock').value);
+        const icon = document.getElementById('prodImageIcon').value.trim() || "👚";
+        if(!name || isNaN(price) || price<=0 || isNaN(stock) || stock<0) { alert("Valid name, price and stock required"); return; }
+        const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 9;
+        products.push({ id: newId, name, category, price, stock, imageIcon: icon });
+        saveAllData();
+        renderFullApp();
+        document.getElementById('prodName').value = '';
+        document.getElementById('prodPrice').value = '';
+        document.getElementById('prodStock').value = '';
+        alert(`Product "${name}" added!`);
+    });
+
+    function renderAdminProducts() {
+        const tbody = document.getElementById('adminProductsBody');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+        products.forEach(prod => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = prod.id;
+            row.insertCell(1).innerText = prod.name;
+            row.insertCell(2).innerText = prod.category;
+            row.insertCell(3).innerText = `KES ${prod.price}`;
+            row.insertCell(4).innerHTML = `<input type="number" id="stock-${prod.id}" value="${prod.stock}" style="width:80px;" min="0">`;
+            row.insertCell(5).innerHTML = `
+                <button class="admin-update-stock" data-id="${prod.id}" style="background:#c17b4c; border:none; padding:6px 12px; border-radius:30px; color:white;"><i class="fas fa-save"></i> Update</button>
+                <button class="admin-delete-prod" data-id="${prod.id}" style="background:#b33; border:none; padding:6px 12px; border-radius:30px; margin-left:5px;"><i class="fas fa-trash"></i> Delete</button>
+            `;
+        });
+        document.querySelectorAll('.admin-update-stock').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                const newStock = parseInt(document.getElementById(`stock-${id}`).value);
+                if(!isNaN(newStock) && newStock>=0) {
+                    const prod = products.find(p=>p.id === id);
+                    if(prod) prod.stock = newStock;
+                    saveAllData();
+                    renderFullApp();
+                    alert("Stock updated");
+                } else alert("Invalid stock");
+            });
+        });
+        document.querySelectorAll('.admin-delete-prod').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                if(confirm("Delete product permanently?")) {
+                    products = products.filter(p => p.id !== id);
+                    saveAllData();
+                    renderFullApp();
+                }
+            });
+        });
+    }
+
+    function renderOrdersTable() {
+        const tbody = document.getElementById('ordersBody');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+        orders.forEach(order => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = order.id;
+            row.insertCell(1).innerText = order.customer_name;
+            row.insertCell(2).innerText = order.phone;
+            row.insertCell(3).innerText = order.location;
+            row.insertCell(4).innerText = `KES ${order.total_price.toLocaleString()}`;
+            row.insertCell(5).innerHTML = `<span class="${order.status === 'pending' ? 'status-pending' : 'status-completed'}">${order.status.toUpperCase()}</span>`;
+            row.insertCell(6).innerHTML = `<button class="toggle-order-status" data-id="${order.id}" style="background:#2c241a; border:none; padding:6px 12px; border-radius:30px; color:white;"><i class="fas fa-exchange-alt"></i> Mark as ${order.status === 'pending' ? 'Completed' : 'Pending'}</button>`;
+        });
+        document.querySelectorAll('.toggle-order-status').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                const order = orders.find(o => o.id === id);
+                if(order) {
+                    order.status = order.status === 'pending' ? 'completed' : 'pending';
+                    saveAllData();
+                    renderOrdersTable();
+                    renderFullApp();
+                }
+            });
+        });
+    }
+
+    // Event listeners for filters
+    document.getElementById('searchInput')?.addEventListener('input', () => renderFilteredProducts());
+    document.getElementById('categoryFilter')?.addEventListener('change', () => renderFilteredProducts());
+    document.getElementById('sortFilter')?.addEventListener('change', () => renderFilteredProducts());
+
+    function showSection(section) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+        document.getElementById(`${section}Section`).classList.add('active-section');
+        if(section === 'shop') renderFilteredProducts();
+        else if(section === 'cart') renderCartTable();
+        else if(section === 'admin') { renderAdminProducts(); renderOrdersTable(); }
+    }
+    document.getElementById('shopNavBtn')?.addEventListener('click', () => showSection('shop'));
+    document.getElementById('cartNavBtn')?.addEventListener('click', () => showSection('cart'));
+    document.getElementById('adminNavBtn')?.addEventListener('click', () => showSection('admin'));
+
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    renderFullApp();
+</script>
+</body>
+</html>
